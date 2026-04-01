@@ -11,8 +11,8 @@ export default class ParentCheckbox {
       this.rootElement
         .getAttribute('aria-controls')
         ?.split(' ')
-        .map((id) => document.getElementById(id) as HTMLInputElement)
-        .filter(Boolean) || [];
+        .map((id) => document.getElementById(id))
+        .filter((element): element is HTMLInputElement => element instanceof HTMLInputElement) ?? [];
     if (!this.childElements.length) return;
     this.controller = new AbortController();
     this.destroyed = false;
