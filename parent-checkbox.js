@@ -7,8 +7,7 @@ export default class ParentCheckbox {
       .split(/\s+/)
       .map((id) => document.getElementById(id))
       .filter((element) => element instanceof HTMLInputElement);
-    if (this.childElements.length === 0) throw new Error('Child elements missing');
-    this.controller = new AbortController();
+    this.eventController = new AbortController();
     this.destroyed = false;
     this.initialize();
   }
@@ -16,12 +15,12 @@ export default class ParentCheckbox {
   destroy() {
     if (this.destroyed) return;
     this.destroyed = true;
-    this.controller.abort();
+    this.eventController.abort();
     this.rootElement.removeAttribute('data-parent-checkbox-initialized');
   }
 
   initialize() {
-    const { signal } = this.controller;
+    const { signal } = this.eventController;
     this.rootElement.addEventListener('change', this.handleRootChange, { signal });
     for (const child of this.childElements) {
       child.addEventListener('change', this.handleChildChange, { signal });

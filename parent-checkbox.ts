@@ -1,7 +1,7 @@
 export default class ParentCheckbox {
   private readonly rootElement: HTMLInputElement;
   private readonly childElements: HTMLInputElement[];
-  private readonly controller = new AbortController();
+  private readonly eventController = new AbortController();
   private destroyed = false;
 
   constructor(root: HTMLInputElement) {
@@ -12,19 +12,18 @@ export default class ParentCheckbox {
       .split(/\s+/)
       .map((id) => document.getElementById(id))
       .filter((elements): elements is HTMLInputElement => elements instanceof HTMLInputElement);
-    if (this.childElements.length === 0) throw new Error('Child elements missing');
     this.initialize();
   }
 
   destroy(): void {
     if (this.destroyed) return;
     this.destroyed = true;
-    this.controller.abort();
+    this.eventController.abort();
     this.rootElement.removeAttribute('data-parent-checkbox-initialized');
   }
 
   private initialize(): void {
-    const { signal } = this.controller;
+    const { signal } = this.eventController;
     this.rootElement.addEventListener('change', this.handleRootChange, { signal });
     for (const child of this.childElements) {
       child.addEventListener('change', this.handleChildChange, { signal });
