@@ -28,11 +28,11 @@ export default class ParentCheckbox {
   }
 
   destroy(): void {
-    if (this.destroyed || !this.#childElements || !this.#controller) {
+    if (this.destroyed || !this.#childElements) {
       return;
     }
     this.destroyed = true;
-    this.#controller.abort();
+    this.#controller?.abort();
     this.#controller = null;
     this.rootElement.removeAttribute('data-parent-checkbox-initialized');
     this.#childElements = null;
