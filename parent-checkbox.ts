@@ -5,27 +5,36 @@ export default class ParentCheckbox {
   #destroyed = false;
 
   constructor(rootElement: HTMLInputElement) {
-    if (!rootElement) throw new Error('RootElement element missing.');
-
+    if (!rootElement) {
+      throw new Error('RootElement element missing.');
+    }
     this.#rootElement = rootElement;
-    const ids = rootElement.getAttribute('aria-controls')?.trim() ?? '';
 
-    if (ids === '') console.warn('Child element IDs missing.');
+    const ids = rootElement.getAttribute('aria-controls')?.trim() ?? '';
+    if (ids === '') {
+      console.warn('Child element IDs missing.');
+    }
 
     const children = ids
       .split(/\s+/)
-      .map((id) => document.getElementById(id))
-      .filter((element): element is HTMLInputElement => element instanceof HTMLInputElement);
-
-    if (children.length === 0) console.warn('Child elements missing.');
-
+      .map((id) => {
+        return document.getElementById(id);
+      })
+      .filter((element): element is HTMLInputElement => {
+        return element instanceof HTMLInputElement;
+      });
+    if (children.length === 0) {
+      console.warn('Child elements missing.');
+    }
     this.#childElements = children;
+
     this.#initialize();
   }
 
   destroy(): void {
-    if (this.#destroyed) return;
-
+    if (this.#destroyed) {
+      return;
+    }
     this.#destroyed = true;
     this.#controller?.abort();
     this.#controller = null;
@@ -34,43 +43,45 @@ export default class ParentCheckbox {
   }
 
   #initialize(): void {
-    if (!this.#childElements || !this.#controller) return;
-
+    if (!this.#childElements || !this.#controller) {
+      return;
+    }
     const { signal } = this.#controller;
     this.#rootElement.addEventListener('change', this.#onRootChange, { signal });
-
     for (const child of this.#childElements) {
       child.addEventListener('change', this.#onChildChange, { signal });
     }
-
     this.#update();
     this.#rootElement.setAttribute('data-parent-checkbox-initialized', '');
   }
 
   #update(): void {
-    if (!this.#childElements) return;
-
-    let count = 0;
-
-    for (const child of this.#childElements) {
-      if (child.checked) count++;
+    if (!this.#childElements) {
+      return;
     }
-
+    let count = 0;
+    for (const child of this.#childElements) {
+      if (child.checked) {
+        count++;
+      }
+    }
     const all = count === this.#childElements.length;
     this.#rootElement.checked = all;
     this.#rootElement.indeterminate = !all && count > 0;
   }
 
   #onRootChange = (): void => {
-    if (!this.#childElements) return;
-
+    if (!this.#childElements) {
+      return;
+    }
     this.#rootElement.indeterminate = false;
     const checked = this.#rootElement.checked;
-
     for (const child of this.#childElements) {
       child.checked = checked;
     }
   };
 
-  #onChildChange = (): void => this.#update();
+  #onChildChange = (): void => {
+    this.#update();
+  };
 }
