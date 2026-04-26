@@ -19,7 +19,7 @@ export default class ParentCheckbox {
     const children = ids
       .split(/\s+/)
       .map((id) => document.getElementById(id))
-      .filter((element): element is HTMLInputElement => element instanceof HTMLInputElement);
+      .filter((element) => element instanceof HTMLInputElement);
 
     if (children.length === 0) {
       console.warn('Child element missing');
@@ -41,7 +41,7 @@ export default class ParentCheckbox {
     this.#childElements = null;
   }
 
-  #initialize(): void {
+  #initialize() {
     if (!this.#childElements || !this.#controller) {
       return;
     }
@@ -57,7 +57,7 @@ export default class ParentCheckbox {
     this.#rootElement.setAttribute('data-parent-checkbox-initialized', '');
   }
 
-  #update(): void {
+  #update() {
     if (!this.#childElements) {
       return;
     }
@@ -67,7 +67,7 @@ export default class ParentCheckbox {
     this.#rootElement.indeterminate = !isAllChecked && this.#childElements.some((child) => child.checked);
   }
 
-  #onRootChange = (): void => {
+  #onRootChange = () => {
     if (!this.#childElements) {
       return;
     }
@@ -80,7 +80,7 @@ export default class ParentCheckbox {
     });
   };
 
-  #onChildChange = (): void => {
+  #onChildChange = () => {
     this.#update();
   };
 }
