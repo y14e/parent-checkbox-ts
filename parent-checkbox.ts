@@ -6,14 +6,14 @@ export default class ParentCheckbox {
 
   constructor(root: HTMLInputElement) {
     if (!root) {
-      throw new Error('Root element missing.');
+      throw new Error('Root element missing');
     }
 
     this.#rootElement = root;
     const ids = root.getAttribute('aria-controls')?.trim() ?? '';
 
     if (ids === '') {
-      console.warn('Child element IDs missing.');
+      console.warn('Child element IDs missing');
     }
 
     const children = ids
@@ -22,7 +22,7 @@ export default class ParentCheckbox {
       .filter((element): element is HTMLInputElement => element instanceof HTMLInputElement);
 
     if (children.length === 0) {
-      console.warn('Child element missing.');
+      console.warn('Child element missing');
     }
 
     this.#childElements = children;
