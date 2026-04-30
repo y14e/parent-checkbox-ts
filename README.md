@@ -13,7 +13,7 @@ new ParentCheckbox(root);
 // root: HTMLElement
 ```
 
-## 📦 API
+## 📦 APIs
 
 ### `destroy`
 
