@@ -1,7 +1,7 @@
 /**
  * parent-checkbox.ts
  *
- * @version 1.0.0
+ * @version 1.0.1
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) 2026 Yusuke Kamiyamane
@@ -20,14 +20,14 @@ export default class ParentCheckbox {
 
   constructor(root: HTMLInputElement) {
     if (!(root instanceof HTMLInputElement)) {
-      throw new Error('Root element missing');
+      throw new TypeError('Invalid root element');
     }
 
     this.#rootElement = root;
     const ids = root.getAttribute('aria-controls')?.trim() ?? '';
 
     if (ids === '') {
-      console.warn('Child element IDs missing');
+      console.warn('Invalid aria-controls attribute.');
     }
 
     this.#childElements = ids
@@ -36,7 +36,7 @@ export default class ParentCheckbox {
       .filter((element) => element instanceof HTMLInputElement);
 
     if (this.#childElements.length === 0) {
-      console.warn('Child element missing');
+      console.warn('Missing child elements.');
     }
 
     this.#initialize();
